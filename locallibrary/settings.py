@@ -87,10 +87,10 @@ DATABASES = {
     'default': {
 	'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djangodb1',
-        'USER': 'ratrace1',
-        'PASSWORD': 'JyRt&7Drr850',
-        'HOST':'database-1.cf4ex06vfedd.eu-central-1.rds.amazonaws.com',
-        'PORT':'3306',
+        'USER': 'root',
+        'PASSWORD': 'icyQTztISd7j13Qnb24r',
+        'HOST':'containers-us-west-141.railway.app',
+        'PORT':'7417',
 	'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
     }
 }
