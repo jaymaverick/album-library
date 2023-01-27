@@ -159,5 +159,5 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
 def register(request):
     form = UserCreationForm
     return render(request = request,
-                  template_name = "catalog/templates/register.html",
+                  template_name = "catalog/register.html",
                   context={"form":form})
