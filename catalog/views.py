@@ -163,17 +163,17 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             login(request, user)
-            return redirect("main:homepage")
+            return redirect("catalog:homepage")
 
         else:
             for msg in form.error_messages:
                 print(form.error_messages[msg])
 
             return render(request = request,
-                          template_name = "main/register.html",
+                          template_name = "catalog/register.html",
                           context={"form":form})
 
     form = UserCreationForm
     return render(request = request,
-                  template_name = "main/register.html",
+                  template_name = "catalog/register.html",
                   context={"form":form})
