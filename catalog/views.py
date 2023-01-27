@@ -1,18 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book, Author, BookInstance, Genre
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 import datetime
+from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
 from catalog.forms import RenewBookForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Author
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
 def index(request):
@@ -168,6 +166,10 @@ def register(request):
         else:
             for msg in form.error_messages:
                 print(form.error_messages[msg])
+
+            return render(request = request,
+                          template_name = "catalog/register.html",
+                          context={"form":form})
 
     form = UserCreationForm
     return render(request = request,
