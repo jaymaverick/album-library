@@ -1,8 +1,18 @@
 from django.shortcuts import render
-
-# Create your views here.
-
 from .models import Book, Author, BookInstance, Genre
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+import datetime
+from django.contrib.auth.decorators import login_required, permission_required
+from catalog.forms import RenewBookForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Author
+from django.contrib.auth.forms import UserCreationForm
 
 
 def index(request):
@@ -28,8 +38,6 @@ def index(request):
     )
 
 
-from django.views import generic
-
 
 class BookListView(generic.ListView):
     """Generic class-based view for a list of books."""
@@ -53,8 +61,6 @@ class AuthorDetailView(generic.DetailView):
     model = Author
 
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -66,10 +72,6 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
 
-# Added as part of challenge!
-from django.contrib.auth.mixins import PermissionRequiredMixin
-
-
 class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
     """Generic class-based view listing all books on loan. Only visible to users with can_mark_returned permission."""
     model = BookInstance
@@ -79,16 +81,6 @@ class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
-
-
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-import datetime
-from django.contrib.auth.decorators import login_required, permission_required
-
-# from .forms import RenewBookForm
-from catalog.forms import RenewBookForm
 
 
 @login_required
@@ -124,10 +116,6 @@ def renew_book_librarian(request, pk):
 
     return render(request, 'catalog/book_renew_librarian.html', context)
 
-
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Author
 
 
 class AuthorCreate(PermissionRequiredMixin, CreateView):
@@ -166,3 +154,10 @@ class BookDelete(PermissionRequiredMixin, DeleteView):
     model = Book
     success_url = reverse_lazy('books')
     permission_required = 'catalog.can_mark_returned'
+
+
+def register(request):
+    form = UserCreationForm
+    return render(request = request,
+                  template_name = "catalog/templates/register.html",
+                  context={"form":form})
