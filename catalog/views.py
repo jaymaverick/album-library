@@ -163,7 +163,7 @@ def register(request):
             user = form.save()
             username = form.cleaned_data.get('username')
             login(request, user)
-            return redirect("catalog:homepage")
+            return redirect("index")
 
         else:
             for msg in form.error_messages:
